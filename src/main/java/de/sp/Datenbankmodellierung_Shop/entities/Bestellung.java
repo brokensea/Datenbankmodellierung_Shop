@@ -18,7 +18,7 @@ public class Bestellung {
     @EqualsAndHashCode.Include // 将 id 包含在 equals 和 hashCode 中
     private Long id;
 
-    private String order_datum;
+    private String orderDatum;
     private String status;
     private Double gesamtpreis;
 
@@ -28,16 +28,10 @@ public class Bestellung {
     @JoinColumn(name = "kunde_id")
     private Kunde kunde;
 
-    @ManyToMany
-    @JoinTable(
-            name = "bestellung_artikel",
-            joinColumns = @JoinColumn(name = "bestellung_id"),
-            inverseJoinColumns = @JoinColumn(name = "artikel_id")
-    )
-    private Set<Artikel> artikels;
+    @OneToMany(mappedBy = "bestellung", cascade = CascadeType.ALL)
+    private Set<BestellungArtikel> bestellungArtikels = new HashSet<>();
 
     public Bestellung() {
-        artikels = new HashSet<>();
     }
 
 }

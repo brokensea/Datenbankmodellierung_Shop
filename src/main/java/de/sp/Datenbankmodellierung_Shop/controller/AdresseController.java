@@ -11,17 +11,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import de.sp.Datenbankmodellierung_Shop.mapper.AdresseMapper;
-import de.sp.Datenbankmodellierung_Shop.dtos.AdresseDTO;
-import de.sp.Datenbankmodellierung_Shop.entities.Adresse;
-import de.sp.Datenbankmodellierung_Shop.services.AdresseService;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
-
 @RestController
 @RequestMapping("/api/v1/adressen")
 public class AdresseController {

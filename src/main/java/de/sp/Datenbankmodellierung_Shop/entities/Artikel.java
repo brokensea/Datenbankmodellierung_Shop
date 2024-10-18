@@ -24,15 +24,14 @@ public class Artikel {
     private String status;
     private Boolean bestand;
 
-    @ManyToMany(mappedBy = "artikels")
-    private Set<Bestellung> bestellungen;
+    @OneToMany(mappedBy = "artikel")
+    private Set<BestellungArtikel> bestellungArtikels = new HashSet<>();
 
     @ManyToMany(mappedBy = "artikel")
-    private Set<Warenkorb> warenkoerbe;
+    private Set<Warenkorb> warenkoerbe = new HashSet<>();
+    ;
 
     public Artikel() {
-        this.bestellungen = new HashSet<>();
-        this.warenkoerbe = new HashSet<>();
     }
 
     @Override
