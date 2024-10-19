@@ -3,7 +3,9 @@ package de.sp.Datenbankmodellierung_Shop.mapper;
 import de.sp.Datenbankmodellierung_Shop.dtos.requestDTO.ArtikelRequestDTO;
 import de.sp.Datenbankmodellierung_Shop.dtos.responseDTO.ArtikelResponseDTO;
 import de.sp.Datenbankmodellierung_Shop.entities.Artikel;
+import org.springframework.stereotype.Component;
 
+@Component
 public class ArtikelMapper {
     public static ArtikelResponseDTO toResponseDTO(Artikel artikel) {
         return new ArtikelResponseDTO(

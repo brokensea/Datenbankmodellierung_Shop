@@ -46,6 +46,7 @@ public class AdresseServiceImpl implements AdresseService {
                     throw new EntityNotFoundException("Adresse with id " + id + " not found");
                 });
     }
+ 
 
     @Override
     public AdresseResponseDTO save(AdresseRequestDTO adresseDTO) {

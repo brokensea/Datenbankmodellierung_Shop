@@ -43,7 +43,7 @@ public class KundeServiceImpl implements KundeService {
         return kundeRepository.findById(id);
     }
 
-    @Override
+   /* @Override
     public KundeResponseDTO save(KundeRequestDTO kundeRequestDTO) {
         // 查找 Adresse，如果不存在则抛出异常
         AdresseResponseDTO adresseResponseDTO = adresseService.findById(kundeRequestDTO.adresseId())
@@ -54,6 +54,18 @@ public class KundeServiceImpl implements KundeService {
         Adresse adresse = AdresseMapper.toEntity(adresseRequestDTO);
         // 使用 KundeMapper 将 KundeRequestDTO 转换为 Kunde 实体并设置 Adresse
         Kunde kunde = KundeMapper.toEntity(kundeRequestDTO, adresse);
+        Kunde savedKunde = kundeRepository.save(kunde);
+        return KundeMapper.toResponseDTO(savedKunde);
+    }*/
+
+    @Override
+    public KundeResponseDTO save(KundeRequestDTO kundeRequestDTO) {
+        // 查找 Adresse，如果不存在则抛出异常
+        Adresse adresse = adresseRepository.findById(kundeRequestDTO.adresseId())
+                .orElseThrow(() -> new EntityNotFoundException("Adresse not found"));
+
+        // 使用 KundeMapper 将 KundeRequestDTO 转换为 Kunde 实体并设置 Adresse
+        Kunde kunde = KundeMapper.toEntity(kundeRequestDTO, adresse); // 直接使用查找到的 adresse
         Kunde savedKunde = kundeRepository.save(kunde);
         return KundeMapper.toResponseDTO(savedKunde);
     }
@@ -78,7 +90,7 @@ public class KundeServiceImpl implements KundeService {
 
         // 设置 Adresse
         existingKunde.setAdresse(adresse);
-        
+
         // 保存并返回更新后的 Kunde
         Kunde savedKunde = kundeRepository.save(existingKunde);
         return KundeMapper.toResponseDTO(savedKunde);  // 返回 KundeResponseDTO

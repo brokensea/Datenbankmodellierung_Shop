@@ -4,7 +4,9 @@ import de.sp.Datenbankmodellierung_Shop.dtos.requestDTO.KundeRequestDTO;
 import de.sp.Datenbankmodellierung_Shop.dtos.responseDTO.KundeResponseDTO;
 import de.sp.Datenbankmodellierung_Shop.entities.Adresse;
 import de.sp.Datenbankmodellierung_Shop.entities.Kunde;
+import org.springframework.stereotype.Component;
 
+@Component
 public class KundeMapper {
 
     public static KundeResponseDTO toResponseDTO(Kunde kunde) {
