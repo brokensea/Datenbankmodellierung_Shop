@@ -1,7 +1,10 @@
 package de.sp.Datenbankmodellierung_Shop.services.impl;
 
+import de.sp.Datenbankmodellierung_Shop.dtos.requestDTO.AdresseRequestDTO;
+import de.sp.Datenbankmodellierung_Shop.dtos.responseDTO.AdresseResponseDTO;
 import de.sp.Datenbankmodellierung_Shop.entities.Adresse;
 import de.sp.Datenbankmodellierung_Shop.entities.Kunde;
+import de.sp.Datenbankmodellierung_Shop.mapper.AdresseMapper;
 import de.sp.Datenbankmodellierung_Shop.repositories.AdresseRepository;
 import de.sp.Datenbankmodellierung_Shop.repositories.KundeRepository;
 import de.sp.Datenbankmodellierung_Shop.services.AdresseService;
@@ -11,37 +14,54 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class AdresseServiceImpl implements AdresseService {
 
     private final AdresseRepository adresseRepository;
     private final KundeRepository kundeRepository;
+    private final AdresseMapper adresseMapper;
 
     @Autowired
-    public AdresseServiceImpl(AdresseRepository adresseRepository, KundeRepository kundeRepository) {
+    public AdresseServiceImpl(AdresseRepository adresseRepository, KundeRepository kundeRepository, AdresseMapper adresseMapper) {
         this.adresseRepository = adresseRepository;
         this.kundeRepository = kundeRepository;
+        this.adresseMapper = adresseMapper;
     }
 
     @Override
-    public List<Adresse> findAll() {
-        return adresseRepository.findAll();
+    public List<AdresseResponseDTO> findAllAddresses() {
+        return adresseRepository.findAll().stream()
+                .map(AdresseMapper::toResponseDTO)
+                .collect(Collectors.toList());
+    }
+
+
+    @Override
+    public Optional<AdresseResponseDTO> findById(Long id) {
+        return adresseRepository.findById(id)
+                .map(AdresseMapper::toResponseDTO)
+                .or(() -> {
+                    throw new EntityNotFoundException("Adresse with id " + id + " not found");
+                });
     }
 
     @Override
-    public Optional<Adresse> findById(Long id) {
-        return adresseRepository.findById(id);
+    public AdresseResponseDTO save(AdresseRequestDTO adresseDTO) {
+        Adresse adresse = AdresseMapper.toEntity(adresseDTO);
+        Adresse savedAdresse = adresseRepository.save(adresse);
+        return AdresseMapper.toResponseDTO(savedAdresse);
     }
 
-    @Override
-    public Adresse save(Adresse adresse) {
-        return adresseRepository.save(adresse);
-    }
 
     @Override
-    public void deleteById(Long id) {
-        adresseRepository.deleteById(id);
+    public boolean deleteById(Long id) {
+        if (adresseRepository.existsById(id)) {
+            adresseRepository.deleteById(id);
+            return true;
+        }
+        return false;
     }
 
     @Override

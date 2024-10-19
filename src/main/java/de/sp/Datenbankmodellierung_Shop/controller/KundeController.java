@@ -1,6 +1,9 @@
 package de.sp.Datenbankmodellierung_Shop.controller;
 
 import de.sp.Datenbankmodellierung_Shop.dtos.KundeDTO;
+import de.sp.Datenbankmodellierung_Shop.dtos.requestDTO.KundeRequestDTO;
+import de.sp.Datenbankmodellierung_Shop.dtos.responseDTO.KundeResponseDTO;
+import de.sp.Datenbankmodellierung_Shop.entities.Kunde;
 import de.sp.Datenbankmodellierung_Shop.mapper.KundeMapper;
 import de.sp.Datenbankmodellierung_Shop.services.KundeService;
 import org.springframework.http.ResponseEntity;
@@ -14,47 +17,41 @@ import java.util.stream.Collectors;
 public class KundeController {
 
     private final KundeService kundeService;
-    private final KundeMapper kundeMapper;
 
     public KundeController(KundeService kundeService, KundeMapper kundeMapper) {
         this.kundeService = kundeService;
-        this.kundeMapper = kundeMapper;
     }
 
     @PostMapping
-    public ResponseEntity<KundeDTO> createKunde(@RequestBody KundeDTO kundeDTO) {
-        // Save the new Kunde and return the DTO representation
-        KundeDTO savedKundeDTO = kundeMapper.toDto(
-                kundeService.save(kundeMapper.toEntity(kundeDTO))
-        );
-        return ResponseEntity.ok(savedKundeDTO);
+    public ResponseEntity<KundeResponseDTO> createKunde(@RequestBody KundeRequestDTO kundeDTO) {
+        KundeResponseDTO savedKundeDTO = kundeService.save(kundeDTO);
+        return ResponseEntity.ok(savedKundeDTO);  // 返回 200 OK 和保存的 Kunde DTO
     }
 
+
     @GetMapping
-    public ResponseEntity<List<KundeDTO>> getAllKunden() {
+    public ResponseEntity<List<KundeResponseDTO>> getAllKunden() {
         // Get all Kunden and return the list of DTOs
-        List<KundeDTO> kundeDTOS = kundeService.findAll().stream()
-                .map(kundeMapper::toDto)
+        List<KundeResponseDTO> kundeDTOS = kundeService.findAll().stream()
+                .map(KundeMapper::toResponseDTO)
                 .collect(Collectors.toList());
         return ResponseEntity.ok(kundeDTOS);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<KundeDTO> getKundeById(@PathVariable Long id) {
+    public ResponseEntity<KundeResponseDTO> getKundeById(@PathVariable Long id) {
         // Find Kunde by ID and return the DTO representation if found
         return kundeService.findById(id)
-                .map(kundeMapper::toDto)
+                .map(KundeMapper::toResponseDTO)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<KundeDTO> updateKunde(@PathVariable Long id, @RequestBody KundeDTO kundeDTO) {
-        // Update the Kunde and return the updated DTO representation
-        KundeDTO updatedKundeDTO = kundeMapper.toDto(
-                kundeService.update(id, kundeMapper.toEntity(kundeDTO))
-        );
-        return ResponseEntity.ok(updatedKundeDTO);
+    public ResponseEntity<KundeResponseDTO> updateKunde(@PathVariable Long id, @RequestBody KundeRequestDTO kundeDTO) {
+        // 更新 Kunde 并返回更新后的 DTO 表示
+        KundeResponseDTO updatedKundeDTO = kundeService.update(id, kundeDTO);  // 直接调用服务方法
+        return ResponseEntity.ok(updatedKundeDTO);  // 返回 200 OK 和更新后的 Kunde DTO
     }
 
     @DeleteMapping("/{id}")

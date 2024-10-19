@@ -22,13 +22,12 @@ public class Bestellung {
     private String status;
     private Double gesamtpreis;
 
-    /*@ManyToOne*/
-    @ManyToOne(cascade = CascadeType.PERSIST)
-    /* @JoinColumn(name = "kunde_id", nullable = false)*/
+
+    @ManyToOne()
     @JoinColumn(name = "kunde_id")
     private Kunde kunde;
 
-    @OneToMany(mappedBy = "bestellung", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "bestellung")
     private Set<BestellungArtikel> bestellungArtikels = new HashSet<>();
 
     public Bestellung() {

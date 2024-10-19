@@ -5,8 +5,7 @@ import lombok.Setter;
 
 @Setter
 @Getter
-public class AddArticleToKundenBestellungDto {
-    private Long kundeId;
-    private Long artikelId;
-    private Long bestellungId;
+public record AddArticleToKundenBestellungDto(Long kundeId,
+                                              Long artikelId,
+                                              Long bestellungId) {
 }

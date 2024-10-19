@@ -19,12 +19,15 @@ public class Adresse {
     @EqualsAndHashCode.Include // 将 id 包含在 equals 和 hashCode 中
     private Long id;
     private String adresseInformation;
+
     @OneToMany(mappedBy = "adresse", cascade = CascadeType.ALL)
-    /* @JsonManagedReference*/
     private Set<Kunde> kunden = new HashSet<>();
 
     public Adresse() {
-        this.kunden = new HashSet<>();
+    }
+
+    public Adresse(String adresseInformation) {
+        this.adresseInformation = adresseInformation;
     }
 }
 

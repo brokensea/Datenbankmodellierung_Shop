@@ -1,6 +1,8 @@
 package de.sp.Datenbankmodellierung_Shop.controller;
 
 import de.sp.Datenbankmodellierung_Shop.dtos.ArtikelDTO;
+import de.sp.Datenbankmodellierung_Shop.dtos.requestDTO.ArtikelRequestDTO;
+import de.sp.Datenbankmodellierung_Shop.dtos.responseDTO.ArtikelResponseDTO;
 import de.sp.Datenbankmodellierung_Shop.services.ArtikelService;
 import de.sp.Datenbankmodellierung_Shop.mapper.ArtikelMapper;
 import org.springframework.http.ResponseEntity;
@@ -14,34 +16,32 @@ import java.util.stream.Collectors;
 public class ArtikelController {
 
     private final ArtikelService artikelService;
-    private final ArtikelMapper artikelMapper;
+
 
     public ArtikelController(ArtikelService artikelService, ArtikelMapper artikelMapper) {
         this.artikelService = artikelService;
-        this.artikelMapper = artikelMapper;
     }
 
     @PostMapping
-    public ResponseEntity<ArtikelDTO> createArtikel(@RequestBody ArtikelDTO artikelDTO) {
-        // Convert DTO to entity and save it
-        ArtikelDTO savedArtikelDTO = artikelMapper.toDto(
-                artikelService.save(artikelMapper.toEntity(artikelDTO))
+    public ResponseEntity<ArtikelResponseDTO> createArtikel(@RequestBody ArtikelRequestDTO artikelDTO) {
+        ArtikelResponseDTO savedArtikelDTO = ArtikelMapper.toResponseDTO(
+                artikelService.save(ArtikelMapper.toEntity(artikelDTO))
         );
         return ResponseEntity.ok(savedArtikelDTO);
     }
 
     @GetMapping
-    public ResponseEntity<List<ArtikelDTO>> getAllArtikel() {
-        List<ArtikelDTO> artikelDTOs = artikelService.findAll().stream()
-                .map(artikelMapper::toDto)
+    public ResponseEntity<List<ArtikelResponseDTO>> getAllArtikel() {
+        List<ArtikelResponseDTO> artikelDTOs = artikelService.findAll().stream()
+                .map(ArtikelMapper::toResponseDTO) // 使用 artikelMapper
                 .collect(Collectors.toList());
         return ResponseEntity.ok(artikelDTOs);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ArtikelDTO> getArtikelById(@PathVariable Long id) {
+    public ResponseEntity<ArtikelResponseDTO> getArtikelById(@PathVariable Long id) {
         return artikelService.findById(id)
-                .map(artikelMapper::toDto)
+                .map(ArtikelMapper::toResponseDTO) // 使用 artikelMapper
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }

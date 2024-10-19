@@ -1,12 +1,15 @@
 package de.sp.Datenbankmodellierung_Shop.services.impl;
 
 import de.sp.Datenbankmodellierung_Shop.dtos.AddArticleToWarenkorbDto;
+import de.sp.Datenbankmodellierung_Shop.dtos.responseDTO.WarenkorbResponseDTO;
 import de.sp.Datenbankmodellierung_Shop.entities.Artikel;
 import de.sp.Datenbankmodellierung_Shop.entities.Warenkorb;
+import de.sp.Datenbankmodellierung_Shop.mapper.WarenkorbMapper;
 import de.sp.Datenbankmodellierung_Shop.repositories.ArtikelRepository;
 import de.sp.Datenbankmodellierung_Shop.repositories.KundeRepository;
 import de.sp.Datenbankmodellierung_Shop.repositories.WarenkorbRepository;
 import de.sp.Datenbankmodellierung_Shop.services.WarenkorbService;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -38,10 +41,6 @@ public class WarenkorbServiceImpl implements WarenkorbService {
         return warenkorbRepository.findById(id);
     }
 
-    @Override
-    public Warenkorb save(Warenkorb warenkorb) {
-        return warenkorbRepository.save(warenkorb);
-    }
 
     @Override
     public void deleteById(Long id) {
@@ -49,9 +48,11 @@ public class WarenkorbServiceImpl implements WarenkorbService {
     }
 
     @Override
-    public void addArticleToKundenWarenkorb(AddArticleToWarenkorbDto dto) {
-        Kunde kunde = kundeRepository.findById(dto.getKundeId()).orElseThrow();
-        Artikel artikel = artikelRepository.findById(dto.getArtikelId()).orElseThrow();
+    public WarenkorbResponseDTO addArticleToKundenWarenkorb(AddArticleToWarenkorbDto dto) {
+        Kunde kunde = kundeRepository.findById(dto.getKundeId())
+                .orElseThrow(() -> new EntityNotFoundException("Kunde not found"));
+        Artikel artikel = artikelRepository.findById(dto.getArtikelId())
+                .orElseThrow(() -> new EntityNotFoundException("Artikel not found"));
         Warenkorb warenkorb = kunde.getWarenkorb();
         if (warenkorb == null) {
             warenkorb = new Warenkorb();
@@ -59,7 +60,9 @@ public class WarenkorbServiceImpl implements WarenkorbService {
             kunde.setWarenkorb(warenkorb);
         }
         warenkorb.getArtikel().add(artikel);
-        /* warenkorbRepository.save(warenkorb);*/
-        kundeRepository.save(kunde);
+        kundeRepository.save(kunde); // 保存用户（可能会级联保存购物车）
+
+        // 返回更新后的 WarenkorbResponseDTO
+        return WarenkorbMapper.toResponseDTO(warenkorb);
     }
 }

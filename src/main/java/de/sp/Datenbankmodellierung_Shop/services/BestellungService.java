@@ -1,6 +1,7 @@
 package de.sp.Datenbankmodellierung_Shop.services;
 
 import de.sp.Datenbankmodellierung_Shop.dtos.AddArticleToKundenBestellungDto;
+import de.sp.Datenbankmodellierung_Shop.dtos.responseDTO.BestellungResponseDTO;
 import de.sp.Datenbankmodellierung_Shop.entities.Bestellung;
 
 import java.util.List;
@@ -15,5 +16,5 @@ public interface BestellungService {
 
     void deleteById(Long id);
 
-    void addArticleToKundenBestellung(AddArticleToKundenBestellungDto dto);
+    BestellungResponseDTO addArticleToKundenBestellung(AddArticleToKundenBestellungDto dto);
 }

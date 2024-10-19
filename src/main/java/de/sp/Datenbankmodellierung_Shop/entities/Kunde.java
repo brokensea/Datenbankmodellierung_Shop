@@ -24,14 +24,13 @@ public class Kunde {
 
     @NotNull
     private String nachname;
-
+    @NotNull
     private String vorname;
+    @NotNull
     private String email;
 
     @ManyToOne
-    /*@JoinColumn(name = "adresse_id", nullable = false)*/
     @JoinColumn(name = "adresse_id")
-    /* @JsonBackReference*/
     private Adresse adresse;
 
     @OneToMany(mappedBy = "kunde", cascade = CascadeType.ALL)

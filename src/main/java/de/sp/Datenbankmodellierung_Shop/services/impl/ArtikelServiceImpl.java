@@ -16,7 +16,7 @@ public class ArtikelServiceImpl implements ArtikelService {
     private final ArtikelRepository artikelRepository;
     private final ArtikelMapper artikelMapper;
 
-
+    @Autowired
     public ArtikelServiceImpl(ArtikelRepository artikelRepository, ArtikelMapper artikelMapper) {
         this.artikelRepository = artikelRepository;
         this.artikelMapper = artikelMapper;
