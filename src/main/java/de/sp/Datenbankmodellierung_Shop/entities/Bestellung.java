@@ -27,7 +27,9 @@ public class Bestellung {
     @JoinColumn(name = "kunde_id")
     private Kunde kunde;
 
-    @OneToMany(mappedBy = "bestellung")
+
+    /* @OneToMany(mappedBy = "bestellung")*/
+    @OneToMany(mappedBy = "bestellung", cascade = CascadeType.ALL)
     private Set<BestellungArtikel> bestellungArtikels = new HashSet<>();
 
     public Bestellung() {

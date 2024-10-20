@@ -50,7 +50,7 @@ public class BestellungController {
         }
     }
 
-    @PostMapping("/addArticle")
+    @PostMapping("/addArticleToOrder")
     public ResponseEntity<BestellungResponseDTO> addArticleToKundenBestellung(@RequestBody AddArticleToKundenBestellungDto dto) {
         try {
             BestellungResponseDTO updatedBestellungDTO = bestellungService.addArticleToKundenBestellung(dto);
